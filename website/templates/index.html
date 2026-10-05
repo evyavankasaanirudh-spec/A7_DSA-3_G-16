@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Intelligent Multi-Pattern Search Engine</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <header>
+        <h1>Intelligent Multi-Pattern Search Engine</h1>
+        <p>DSA-Based Document Search and Analytics Platform</p>
+    </header>
+
+
+    <!-- DATASET STATISTICS -->
+    <section class="stats">
+
+        <div class="stat-card">
+            <h2>{{ document_count }}</h2>
+            <p>Documents</p>
+        </div>
+
+        <div class="stat-card">
+            <h2>{{ term_count }}</h2>
+            <p>Unique Terms</p>
+        </div>
+
+        <div class="stat-card">
+            <h2>{{ category_count }}</h2>
+            <p>Categories</p>
+        </div>
+
+    </section>
+
+
+    <!-- SEARCH -->
+    <section class="search-box">
+
+        <h2>Document Search</h2>
+
+        <form method="POST">
+
+            <input
+                type="text"
+                name="query"
+                placeholder="Enter search query..."
+                value="{{ query }}"
+                required
+            >
+
+            <select name="algorithm">
+
+                <option value="Inverted Index"
+                    {% if algorithm == "Inverted Index" %}selected{% endif %}>
+                    Inverted Index
+                </option>
+
+                <option value="Aho-Corasick"
+                    {% if algorithm == "Aho-Corasick" %}selected{% endif %}>
+                    Aho-Corasick
+                </option>
+
+                <option value="Ranked Search"
+                    {% if algorithm == "Ranked Search" %}selected{% endif %}>
+                    Ranked Search
+                </option>
+
+            </select>
+
+            <button type="submit">
+                Search
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- SEARCH RESULTS -->
+    {% if query %}
+
+    <section class="results">
+
+        <h2>Search Results</h2>
+
+        <p>
+            Query:
+            <strong>{{ query }}</strong>
+        </p>
+
+        <p>
+            Algorithm:
+            <strong>{{ algorithm }}</strong>
+        </p>
+
+        <p>
+            <strong>{{ result_count }}</strong>
+            documents found in
+            <strong>{{ "%.6f"|format(execution_time) }}</strong>
+            seconds
+        </p>
+
+
+        {% if results %}
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Document ID</th>
+                    <th>Category</th>
+                    <th>Score</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for result in results %}
+
+                <tr>
+
+                    <td>{{ result.id }}</td>
+
+                    <td>{{ result.category }}</td>
+
+                    <td>{{ result.score }}</td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+            <p class="no-results">
+                No matching documents found.
+            </p>
+
+        {% endif %}
+
+    </section>
+
+    {% endif %}
+
+
+    <!-- PERFORMANCE -->
+    <section class="performance">
+
+    <h2>Algorithm Performance</h2>
+
+    <div
+        id="performanceData"
+        data-index-build="{{ performance['Inverted Index Build'] }}"
+        data-index-query="{{ performance['Inverted Index Query'] }}"
+        data-ac-build="{{ performance['Aho-Corasick Build'] }}"
+        data-ac-search="{{ performance['Aho-Corasick Search'] }}"
+        data-ranked="{{ performance['Ranked Search'] }}"
+    ></div>
+
+    <div class="chart-container">
+        <canvas id="performanceChart"></canvas>
+    </div>
+
+</section>
+
+
+    <!-- VALIDATION -->
+    <section class="validation">
+
+        <h2>Validation & Testing</h2>
+
+        <div class="validation-box">
+
+            <div>
+                <span class="check">✓</span>
+                <strong>10 / 10 Tests Passed</strong>
+            </div>
+
+            <p>
+                Core search, multi-pattern matching,
+                ranking and consistency tests successfully passed.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- DATASET INFORMATION -->
+    <section class="dataset-info">
+
+        <h2>Dataset Analytics</h2>
+
+        <div class="dataset-grid">
+
+            <div>
+                <strong>Dataset</strong>
+                <p>20 Newsgroups</p>
+            </div>
+
+            <div>
+                <strong>Average Document Length</strong>
+                <p>1,218.14 characters</p>
+            </div>
+
+            <div>
+                <strong>Minimum Length</strong>
+                <p>0 characters</p>
+            </div>
+
+            <div>
+                <strong>Maximum Length</strong>
+                <p>74,878 characters</p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer>
+
+        <p>
+            Intelligent Multi-Pattern Search and Document Analytics Engine
+        </p>
+
+        <p>
+            Data Structures and Algorithms Project
+        </p>
+
+    </footer>
+
+</div>
+
+
+<!-- CHART -->
+<script>
+
+const dataElement = document.getElementById("performanceData");
+
+const performanceLabels = [
+    "Index Build",
+    "Index Query",
+    "AC Build",
+    "AC Search",
+    "Ranked Search"
+];
+
+const performanceValues = [
+    parseFloat(dataElement.dataset.indexBuild),
+    parseFloat(dataElement.dataset.indexQuery),
+    parseFloat(dataElement.dataset.acBuild),
+    parseFloat(dataElement.dataset.acSearch),
+    parseFloat(dataElement.dataset.ranked)
+];
+
+new Chart(
+    document.getElementById("performanceChart"),
+    {
+        type: "bar",
+
+        data: {
+            labels: performanceLabels,
+
+            datasets: [
+                {
+                    label: "Execution Time (seconds)",
+                    data: performanceValues
+                }
+            ]
+        },
+
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+
+            plugins: {
+                legend: {
+                    display: true
+                }
+            },
+
+            scales: {
+                y: {
+                    beginAtZero: true,
+
+                    title: {
+                        display: true,
+                        text: "Time (seconds)"
+                    }
+                }
+            }
+        }
+    }
+);
+
+</script>
+
+</body>
+</html>
