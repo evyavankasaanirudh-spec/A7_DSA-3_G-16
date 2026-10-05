@@ -264,11 +264,11 @@ const performanceLabels = [
 ];
 
 const performanceValues = [
-    parseFloat(dataElement.dataset.indexBuild),
-    parseFloat(dataElement.dataset.indexQuery),
-    parseFloat(dataElement.dataset.acBuild),
-    parseFloat(dataElement.dataset.acSearch),
-    parseFloat(dataElement.dataset.ranked)
+    parseFloat(dataElement.dataset.indexBuild) * 1000,
+    parseFloat(dataElement.dataset.indexQuery) * 1000,
+    parseFloat(dataElement.dataset.acBuild) * 1000,
+    parseFloat(dataElement.dataset.acSearch) * 1000,
+    parseFloat(dataElement.dataset.ranked) * 1000
 ];
 
 new Chart(
@@ -281,7 +281,7 @@ new Chart(
 
             datasets: [
                 {
-                    label: "Execution Time (seconds)",
+                    label: "Execution Time (milliseconds)",
                     data: performanceValues
                 }
             ]
@@ -303,7 +303,7 @@ new Chart(
 
                     title: {
                         display: true,
-                        text: "Time (seconds)"
+                        text: "Time (ms)"
                     }
                 }
             }
