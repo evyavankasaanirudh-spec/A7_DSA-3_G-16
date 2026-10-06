@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Intelligent Multi-Pattern Search Engine</title>
@@ -10,191 +13,1132 @@
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
+
 </head>
+
 
 <body>
 
 <div class="container">
 
+    <!-- ================================================= -->
     <!-- HEADER -->
-    <header>
-        <h1>Intelligent Multi-Pattern Search Engine</h1>
-        <p>DSA-Based Document Search and Analytics Platform</p>
+    <!-- ================================================= -->
+
+    <header class="hero">
+
+        <div class="hero-badge">
+            DSA • DOCUMENT ANALYTICS • SEARCH
+        </div>
+
+        <h1>
+            Intelligent Multi-Pattern Search Engine
+        </h1>
+
+        <p>
+            DSA-Based Document Search and Analytics Platform
+        </p>
+
+        <span>
+            Inverted Index • Aho-Corasick • Ranked Retrieval
+        </span>
+
     </header>
 
 
-    <!-- DATASET STATISTICS -->
-    <section class="stats">
+    <!-- ================================================= -->
+    <!-- DATASET OVERVIEW -->
+    <!-- ================================================= -->
+
+    <section class="stats-grid">
 
         <div class="stat-card">
-            <h2>{{ document_count }}</h2>
-            <p>Documents</p>
+
+            <div class="stat-icon">📄</div>
+
+            <h3>Documents</h3>
+
+            <strong>
+                {{ "{:,}".format(document_count) }}
+            </strong>
+
+            <p>20 Newsgroups Dataset</p>
+
         </div>
 
-        <div class="stat-card">
-            <h2>{{ term_count }}</h2>
-            <p>Unique Terms</p>
-        </div>
 
         <div class="stat-card">
-            <h2>{{ category_count }}</h2>
-            <p>Categories</p>
+
+            <div class="stat-icon">🔤</div>
+
+            <h3>Unique Terms</h3>
+
+            <strong>
+                {{ "{:,}".format(term_count) }}
+            </strong>
+
+            <p>Indexed vocabulary</p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">📚</div>
+
+            <h3>Categories</h3>
+
+            <strong>
+                {{ category_count }}
+            </strong>
+
+            <p>News discussion topics</p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">✓</div>
+
+            <h3>Validation</h3>
+
+            <strong>10/10</strong>
+
+            <p>Tests passed</p>
+
         </div>
 
     </section>
 
 
+    <!-- ================================================= -->
     <!-- SEARCH -->
-    <section class="search-box">
+    <!-- ================================================= -->
 
-        <h2>Document Search</h2>
+    <section class="card search-card">
 
-        <form method="POST">
+        <div class="section-heading">
 
-            <input
-                type="text"
-                name="query"
-                placeholder="Enter search query..."
-                value="{{ query }}"
-                required
-            >
+            <div>
 
-            <select name="algorithm">
+                <span class="section-label">
+                    SEARCH ENGINE
+                </span>
 
-                <option value="Inverted Index"
-                    {% if algorithm == "Inverted Index" %}selected{% endif %}>
-                    Inverted Index
-                </option>
+                <h2>
+                    Search Intelligence
+                </h2>
 
-                <option value="Aho-Corasick"
-                    {% if algorithm == "Aho-Corasick" %}selected{% endif %}>
-                    Aho-Corasick
-                </option>
+                <p>
+                    Enter one or more keywords and select a DSA-based
+                    search algorithm.
+                </p>
 
-                <option value="Ranked Search"
-                    {% if algorithm == "Ranked Search" %}selected{% endif %}>
-                    Ranked Search
-                </option>
+            </div>
 
-            </select>
+        </div>
 
-            <button type="submit">
-                Search
+
+        <form method="POST" class="search-form">
+
+            <div class="input-wrapper">
+
+                <label for="query">
+                    Search Query
+                </label>
+
+                <input
+                    type="text"
+                    id="query"
+                    name="query"
+                    value="{{ query }}"
+                    placeholder="Example: computer science"
+                    autocomplete="off"
+                    required
+                >
+
+            </div>
+
+
+            <div class="select-wrapper">
+
+                <label for="algorithm">
+                    Algorithm
+                </label>
+
+                <select
+                    id="algorithm"
+                    name="algorithm"
+                >
+
+                    <option
+                        value="Inverted Index"
+                        {% if algorithm == "Inverted Index" %}
+                        selected
+                        {% endif %}
+                    >
+                        Inverted Index
+                    </option>
+
+                    <option
+                        value="Aho-Corasick"
+                        {% if algorithm == "Aho-Corasick" %}
+                        selected
+                        {% endif %}
+                    >
+                        Aho-Corasick
+                    </option>
+
+                    <option
+                        value="Ranked Search"
+                        {% if algorithm == "Ranked Search" %}
+                        selected
+                        {% endif %}
+                    >
+                        Ranked Search
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="select-wrapper">
+
+    <label for="search_mode">
+        Search Mode
+    </label>
+
+    <select
+        id="search_mode"
+        name="search_mode"
+    >
+
+        <option
+            value="AND"
+            {% if search_mode == "AND" %}
+            selected
+            {% endif %}
+        >
+            AND — All Keywords
+        </option>
+
+        <option
+            value="OR"
+            {% if search_mode == "OR" %}
+            selected
+            {% endif %}
+        >
+            OR — Any Keyword
+        </option>
+
+    </select>
+
+</div>
+
+
+            <button type="submit" class="search-button">
+
+                <span>Search</span>
+
+                <span class="arrow">
+                    →
+                </span>
+
             </button>
 
         </form>
 
+
+        {% if algorithm in algorithm_info %}
+
+        <div class="algorithm-info">
+
+            <div class="algorithm-info-icon">
+                ⚡
+            </div>
+
+            <div>
+
+                <strong>
+                    {{ algorithm_info[algorithm]["title"] }}
+                </strong>
+
+                <p>
+                    {{ algorithm_info[algorithm]["description"] }}
+                </p>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
     </section>
 
 
-    <!-- SEARCH RESULTS -->
+    <!-- ================================================= -->
+    <!-- SEARCH INTELLIGENCE -->
+    <!-- ================================================= -->
+
     {% if query %}
 
-    <section class="results">
+    <section class="card intelligence-card">
 
-        <h2>Search Results</h2>
+        <div class="section-heading">
 
-        <p>
-            Query:
-            <strong>{{ query }}</strong>
-        </p>
+            <div>
 
-        <p>
-            Algorithm:
-            <strong>{{ algorithm }}</strong>
-        </p>
+                <span class="section-label">
+                    SEARCH INTELLIGENCE
+                </span>
 
-        <p>
-            <strong>{{ result_count }}</strong>
-            documents found in
-            <strong>{{ "%.6f"|format(execution_time) }}</strong>
-            seconds
-        </p>
+                <h2>
+                    Search Summary
+                </h2>
+
+            </div>
+
+            <div class="query-pill">
+                "{{ query }}"
+            </div>
+
+        </div>
+
+
+        <div class="intelligence-grid">
+
+            <div class="intel-item">
+
+    <span class="intel-label">
+        Algorithm
+    </span>
+
+    <strong>
+        {{ algorithm }}
+    </strong>
+
+</div>
+
+
+<div class="intel-item">
+
+    <span class="intel-label">
+        Search Mode
+    </span>
+
+    <strong>
+        {{ search_mode }}
+    </strong>
+
+</div>
+
+
+            <div class="intel-item">
+
+                <span class="intel-label">
+                    Documents Found
+                </span>
+
+                <strong>
+                    {{ "{:,}".format(result_count) }}
+                </strong>
+
+            </div>
+
+
+            <div class="intel-item">
+
+                <span class="intel-label">
+                    Search Time
+                </span>
+
+                <strong>
+                    {{ search_performance }} ms
+                </strong>
+
+            </div>
+
+
+            <div class="intel-item">
+
+                <span class="intel-label">
+                    Top Score
+                </span>
+
+                <strong>
+
+                    {% if top_score > 0 %}
+                        {{ top_score }}
+                    {% else %}
+                        —
+                    {% endif %}
+
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- RESULT ANALYTICS -->
+    <!-- ================================================= -->
+
+    <section class="analytics-grid">
+
+        <div class="analytics-card">
+
+            <span>
+                TOP CATEGORY
+            </span>
+
+            <strong>
+                {{ analytics.top_category }}
+            </strong>
+
+            <small>
+                {{ analytics.top_category_count }}
+                matching documents
+            </small>
+
+        </div>
+
+
+        <div class="analytics-card">
+
+            <span>
+                AVERAGE DOCUMENT LENGTH
+            </span>
+
+            <strong>
+                {{ "{:,.2f}".format(analytics.average_length) }}
+            </strong>
+
+            <small>
+                characters
+            </small>
+
+        </div>
+
+
+        <div class="analytics-card">
+
+            <span>
+                LONGEST RESULT
+            </span>
+
+            <strong>
+                {{ "{:,}".format(analytics.longest_document) }}
+            </strong>
+
+            <small>
+                characters
+            </small>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- SEARCH RESULTS -->
+    <!-- ================================================= -->
+
+    <section class="card results-card">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="section-label">
+                    RETRIEVAL RESULTS
+                </span>
+
+                <h2>
+                    Matching Documents
+                </h2>
+
+            </div>
+
+            <div class="result-count-badge">
+
+                {{ result_count }} results
+
+            </div>
+
+        </div>
 
 
         {% if results %}
 
-        <table>
+        <div class="table-container">
 
-            <thead>
+            <table>
 
-                <tr>
-                    <th>Document ID</th>
-                    <th>Category</th>
-                    <th>Score</th>
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-            {% for result in results %}
+                <thead>
 
                 <tr>
 
-                    <td>{{ result.id }}</td>
+                    <th>
+                        Rank
+                    </th>
 
-                    <td>{{ result.category }}</td>
+                    <th>
+                        Document ID
+                    </th>
 
-                    <td>{{ result.score }}</td>
+                    <th>
+                        Category
+                    </th>
+
+                    <th>
+                        Score
+                    </th>
+
+                    <th>
+                        Preview
+                    </th>
+
+                    <th>
+                        Action
+                    </th>
 
                 </tr>
 
-            {% endfor %}
+                </thead>
 
-            </tbody>
 
-        </table>
+                <tbody>
+
+                {% for result in results %}
+
+                <tr>
+
+                    <td>
+
+                        <span class="rank-number">
+                            {{ loop.index }}
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <span class="document-id">
+                            #{{ result.id }}
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <span class="category-tag">
+                            {{ result.category }}
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        {% if result.score != "-" %}
+
+                            <span class="score-value">
+                                {{ result.score }}
+                            </span>
+
+                        {% else %}
+
+                            <span class="muted-score">
+                                —
+
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td class="preview-cell">
+
+                        {{ result.preview }}
+
+                    </td>
+
+
+                    <td>
+
+                        <button
+    class="view-button"
+    data-document-id="{{ result.id }}"
+    onclick="openDocument(this.dataset.documentId)"
+>
+    View
+</button>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
 
         {% else %}
 
-            <p class="no-results">
-                No matching documents found.
+        <div class="empty-state">
+
+            <div class="empty-icon">
+                🔍
+            </div>
+
+            <h3>
+                No matching documents
+            </h3>
+
+            <p>
+                Try another keyword or search phrase.
             </p>
 
+        </div>
+
         {% endif %}
+
+    </section>
+
+    {% if query %}
+
+    <div class="category-summary">
+
+    <div class="category-summary-card">
+
+        <span class="section-label">
+            MATCHING CATEGORIES
+        </span>
+
+        <strong>
+            {{ matching_category_count }}
+        </strong>
+
+        <p>
+            Categories represented in the current results
+        </p>
+
+    </div>
+
+
+    <div class="category-summary-card">
+
+        <span class="section-label">
+            TOP CATEGORY
+        </span>
+
+        <strong>
+            {{ top_category[0] }}
+        </strong>
+
+        <p>
+            {{ top_category[1] }}
+            matching documents
+        </p>
+
+    </div>
+
+
+    <div class="category-summary-card">
+
+        <span class="section-label">
+            RESULT COVERAGE
+        </span>
+
+        <strong>
+            {{ result_count }}
+        </strong>
+
+        <p>
+            Total documents returned by the search
+        </p>
+
+    </div>
+
+</div>
+
+    {% endif %}
+
+    <!-- ================================================= -->
+    <!-- CATEGORY DISTRIBUTION -->
+    <!-- ================================================= -->
+
+    {% if category_distribution %}
+
+    <section class="card category-card">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="section-label">
+                    RESULT ANALYTICS
+                </span>
+
+                <h2>
+                    Category Distribution
+                </h2>
+
+                <p>
+                    Distribution of matching documents across
+                    the dataset categories.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="category-layout">
+
+            <div class="chart-box category-chart">
+
+                <canvas id="categoryChart"></canvas>
+
+            </div>
+
+
+            <div class="category-list">
+
+                {% for category, count in category_distribution[:10] %}
+
+                <div class="category-row">
+
+                    <span>
+                        {{ category }}
+                    </span>
+
+                    <strong>
+                        {{ count }}
+                    </strong>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
 
     </section>
 
     {% endif %}
 
 
+    <!-- ================================================= -->
+    <!-- SELECTED DOCUMENT -->
+    <!-- ================================================= -->
+
+    {% if selected_document %}
+
+    <section class="card document-card">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="section-label">
+                    DOCUMENT VIEWER
+                </span>
+
+                <h2>
+                    Document #{{ selected_document.id }}
+                </h2>
+
+            </div>
+
+            <span class="category-tag">
+                {{ selected_document.category }}
+            </span>
+
+        </div>
+
+
+        <div class="document-meta">
+
+            <span>
+                Category: {{ selected_document.category }}
+            </span>
+
+            <span>
+                Length:
+                {{ "{:,}".format(selected_document.text|length) }}
+                characters
+            </span>
+
+        </div>
+
+
+        <div class="document-content">
+
+            {{ selected_document.text }}
+
+        </div>
+
+    </section>
+
+    {% endif %}
+
+    {% endif %}
+
+
+    <!-- ================================================= -->
     <!-- PERFORMANCE -->
-    <section class="performance">
+    <!-- ================================================= -->
 
-    <h2>Algorithm Performance</h2>
+    <section class="card performance-card">
 
-    <div
-        id="performanceData"
-        data-index-build="{{ performance['Inverted Index Build'] }}"
-        data-index-query="{{ performance['Inverted Index Query'] }}"
-        data-ac-build="{{ performance['Aho-Corasick Build'] }}"
-        data-ac-search="{{ performance['Aho-Corasick Search'] }}"
-        data-ranked="{{ performance['Ranked Search'] }}"
-    ></div>
+        <div class="section-heading">
 
-    <div class="chart-container">
-        <canvas id="performanceChart"></canvas>
+            <div>
+
+                <span class="section-label">
+                    BENCHMARKING
+                </span>
+
+                <h2>
+                    Algorithm Performance
+                </h2>
+
+                <p>
+                    Measured execution times from the final
+                    experimental evaluation.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="chart-container">
+
+            <canvas id="performanceChart"></canvas>
+
+        </div>
+
+    </section>
+
+    <section class="card comparison-section">
+
+    <div class="section-heading">
+
+        <span class="section-label">
+            DSA COMPARISON
+        </span>
+
+        <h2>
+            Algorithm Comparison
+        </h2>
+
+        <p>
+            Comparison of the implemented search techniques
+            using the measured execution times.
+        </p>
+
+    </div>
+
+    <div class="comparison-grid">
+
+        {% for name, data in algorithm_comparison.items() %}
+
+        <div class="comparison-card">
+
+            <div class="comparison-header">
+
+                <h3>
+                    {{ name }}
+                </h3>
+
+            </div>
+
+            <div class="comparison-metrics">
+
+                <div class="comparison-metric">
+
+                    <span>
+                        Build Time
+                    </span>
+
+                    <strong>
+                        {{ "%.3f"|format(data.build * 1000) }} ms
+                    </strong>
+
+                </div>
+
+                <div class="comparison-metric">
+
+                    <span>
+                        Search Time
+                    </span>
+
+                    <strong>
+                        {{ "%.3f"|format(data.search * 1000) }} ms
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <p class="comparison-description">
+                {{ data.description }}
+            </p>
+
+        </div>
+
+        {% endfor %}
+
     </div>
 
 </section>
 
 
-    <!-- VALIDATION -->
-    <section class="validation">
+    <!-- ================================================= -->
+    <!-- DSA EXPLANATION -->
+    <!-- ================================================= -->
 
-        <h2>Validation & Testing</h2>
+    <section class="algorithm-grid">
 
-        <div class="validation-box">
+        <div class="algorithm-card">
 
-            <div>
-                <span class="check">✓</span>
-                <strong>10 / 10 Tests Passed</strong>
+            <div class="algorithm-number">
+                01
             </div>
 
+            <h3>
+                Inverted Index
+            </h3>
+
             <p>
-                Core search, multi-pattern matching,
-                ranking and consistency tests successfully passed.
+                Maps each term to the documents containing it.
+                Multiple query terms are resolved using set
+                intersection.
+            </p>
+
+            <div class="algorithm-tag">
+                FAST RETRIEVAL
+            </div>
+
+        </div>
+
+
+        <div class="algorithm-card">
+
+            <div class="algorithm-number">
+                02
+            </div>
+
+            <h3>
+                Aho-Corasick
+            </h3>
+
+            <p>
+                Builds a finite-state automaton with failure
+                links to detect multiple patterns in text.
+            </p>
+
+            <div class="algorithm-tag">
+                MULTI-PATTERN MATCHING
+            </div>
+
+        </div>
+
+
+        <div class="algorithm-card">
+
+            <div class="algorithm-number">
+                03
+            </div>
+
+            <h3>
+                Ranked Search
+            </h3>
+
+            <p>
+                Uses term frequency to assign relevance scores
+                and rank matching documents.
+            </p>
+
+            <div class="algorithm-tag">
+                RELEVANCE RANKING
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- DATASET ANALYTICS -->
+    <!-- ================================================= -->
+
+    <section class="card dataset-card">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="section-label">
+                    DATASET
+                </span>
+
+                <h2>
+                    Dataset Analytics
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="dataset-grid">
+
+            <div>
+
+                <span>
+                    Dataset
+                </span>
+
+                <strong>
+                    20 Newsgroups
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Documents
+                </span>
+
+                <strong>
+                    11,314
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Categories
+                </span>
+
+                <strong>
+                    20
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Avg. Length
+                </span>
+
+                <strong>
+                    1,218.14
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Minimum Length
+                </span>
+
+                <strong>
+                    0
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Maximum Length
+                </span>
+
+                <strong>
+                    74,878
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Unique Terms
+                </span>
+
+                <strong>
+                    97,489
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Validation
+                </span>
+
+                <strong>
+                    10/10
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- VALIDATION -->
+    <!-- ================================================= -->
+
+    <section class="validation-card">
+
+        <div class="validation-icon">
+            ✓
+        </div>
+
+        <div>
+
+            <span>
+                VALIDATION STATUS
+            </span>
+
+            <h2>
+                10 / 10 Tests Passed
+            </h2>
+
+            <p>
+                Search correctness was validated across
+                inverted index, Aho-Corasick and ranked
+                retrieval functionality.
             </p>
 
         </div>
@@ -202,116 +1146,429 @@
     </section>
 
 
-    <!-- DATASET INFORMATION -->
-    <section class="dataset-info">
+    <!-- ================================================= -->
+    <!-- FOOTER -->
+    <!-- ================================================= -->
 
-        <h2>Dataset Analytics</h2>
+    <footer>
 
-        <div class="dataset-grid">
+        <div>
 
-            <div>
-                <strong>Dataset</strong>
-                <p>20 Newsgroups</p>
-            </div>
+            <strong>
+                Intelligent Multi-Pattern Search Engine
+            </strong>
 
-            <div>
-                <strong>Average Document Length</strong>
-                <p>1,218.14 characters</p>
-            </div>
-
-            <div>
-                <strong>Minimum Length</strong>
-                <p>0 characters</p>
-            </div>
-
-            <div>
-                <strong>Maximum Length</strong>
-                <p>74,878 characters</p>
-            </div>
+            <p>
+                DSA Project • Document Search & Analytics
+            </p>
 
         </div>
 
-    </section>
 
+        <div class="footer-team">
 
-    <!-- FOOTER -->
-    <footer>
+            <span>
+                Evyavan • Rishi • Suhas
+            </span>
 
-        <p>
-            Intelligent Multi-Pattern Search and Document Analytics Engine
-        </p>
+            <span>
+                Computer Science
+            </span>
 
-        <p>
-            Data Structures and Algorithms Project
-        </p>
+        </div>
 
     </footer>
 
 </div>
 
 
-<!-- CHART -->
+<!-- ===================================================== -->
+<!-- DOCUMENT MODAL -->
+<!-- ===================================================== -->
+
+<div
+    id="documentModal"
+    class="modal"
+    onclick="closeDocument(event)"
+>
+
+    <div
+        class="modal-content"
+        onclick="event.stopPropagation()"
+    >
+
+        <button
+            class="modal-close"
+            onclick="closeDocument()"
+        >
+            ×
+        </button>
+
+
+        <div id="modalBody">
+
+            <div class="loading">
+                Loading document...
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ===================================================== -->
+<!-- JAVASCRIPT -->
+<!-- ===================================================== -->
+
 <script>
 
-const dataElement = document.getElementById("performanceData");
+    // =====================================================
+    // PERFORMANCE CHART
+    // =====================================================
 
-const performanceLabels = [
-    "Index Build",
-    "Index Query",
-    "AC Build",
-    "AC Search",
-    "Ranked Search"
+    const performanceLabels = [
+        "Index Build",
+        "Index Query",
+        "AC Build",
+        "AC Search",
+        "Ranked Search"
+    ];
+
+
+    const performanceValues = [
+    {{ performance["Inverted Index Build"] * 1000 }},
+    {{ performance["Inverted Index Query"] * 1000 }},
+    {{ performance["Aho-Corasick Build"] * 1000 }},
+    {{ performance["Aho-Corasick Search"] * 1000 }},
+    {{ performance["Ranked Search"] * 1000 }}
 ];
 
-const performanceValues = [
-    parseFloat(dataElement.dataset.indexBuild) * 1000,
-    parseFloat(dataElement.dataset.indexQuery) * 1000,
-    parseFloat(dataElement.dataset.acBuild) * 1000,
-    parseFloat(dataElement.dataset.acSearch) * 1000,
-    parseFloat(dataElement.dataset.ranked) * 1000
-];
+    const performanceCanvas =
+        document.getElementById("performanceChart");
 
-new Chart(
-    document.getElementById("performanceChart"),
-    {
-        type: "bar",
 
-        data: {
-            labels: performanceLabels,
+    if (performanceCanvas) {
 
-            datasets: [
-                {
-                    label: "Execution Time (milliseconds)",
-                    data: performanceValues
-                }
-            ]
-        },
+        new Chart(
+            performanceCanvas,
+            {
 
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
+                type: "bar",
 
-            plugins: {
-                legend: {
-                    display: true
-                }
-            },
+                data: {
 
-            scales: {
-                y: {
-                    beginAtZero: true,
+                    labels: performanceLabels,
 
-                    title: {
-                        display: true,
-                        text: "Time (ms)"
+                    datasets: [
+
+                        {
+
+                            label: "Execution Time (ms)",
+
+                            data: performanceValues,
+
+                            borderWidth: 1
+
+                        }
+
+                    ]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    plugins: {
+
+                        legend: {
+                            display: true
+                        }
+
+                    },
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero: true,
+
+                            title: {
+
+                                display: true,
+
+                                text: "Time (ms)"
+
+                            }
+
+                        }
+
                     }
+
                 }
+
             }
-        }
+        );
+
     }
-);
+
+
+    // =====================================================
+    // CATEGORY CHART
+    // =====================================================
+
+    const categoryCanvas =
+        document.getElementById("categoryChart");
+
+
+    {% if category_distribution %}
+
+    const categoryLabels = [
+
+        {% for category, count in category_distribution[:10] %}
+
+            "{{ category }}",
+
+        {% endfor %}
+
+    ];
+
+
+    const categoryValues = [
+
+        {% for category, count in category_distribution[:10] %}
+
+            {{ count }},
+
+        {% endfor %}
+
+    ];
+
+
+    if (categoryCanvas) {
+
+        new Chart(
+
+            categoryCanvas,
+
+            {
+
+                type: "doughnut",
+
+                data: {
+
+                    labels: categoryLabels,
+
+                    datasets: [
+
+                        {
+
+                            label: "Documents",
+
+                            data: categoryValues,
+
+                            borderWidth: 1
+
+                        }
+
+                    ]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    plugins: {
+
+                        legend: {
+
+                            position: "right"
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
+    }
+
+    {% endif %}
+
+    // =====================================================
+    // DOCUMENT VIEWER
+    // =====================================================
+
+    function highlightKeywords(text, query) {
+
+    if (!query || !query.trim()) {
+        return escapeHtml(text);
+    }
+
+    const terms = query
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean)
+        .map(term =>
+            term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+        );
+
+    if (terms.length === 0) {
+        return escapeHtml(text);
+    }
+
+    const pattern = new RegExp(
+        `(${terms.join("|")})`,
+        "gi"
+    );
+
+    return escapeHtml(text).replace(
+        pattern,
+        "<mark>$1</mark>"
+    );
+}
+
+    const currentQuery = {{ query|tojson }};
+
+    async function openDocument(docId) {
+
+        const modal =
+            document.getElementById("documentModal");
+
+        const modalBody =
+            document.getElementById("modalBody");
+
+
+        modal.classList.add("active");
+
+
+        modalBody.innerHTML =
+            '<div class="loading">Loading document...</div>';
+
+
+        try {
+
+            const response =
+                await fetch(`/api/document/${docId}`);
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Document could not be loaded."
+                );
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            modalBody.innerHTML = `
+
+                <span class="section-label">
+                    DOCUMENT VIEWER
+                </span>
+
+                <h2>
+                    Document #${data.document_id}
+                </h2>
+
+                <div class="modal-meta">
+
+                    <span>
+                        ${data.category}
+                    </span>
+
+                    <span>
+                        ${data.length.toLocaleString()}
+                        characters
+                    </span>
+
+                </div>
+
+                <div class="modal-document">
+
+                    ${highlightKeywords(data.text, currentQuery)}
+
+                </div>
+
+            `;
+
+        }
+
+        catch (error) {
+
+            modalBody.innerHTML = `
+
+                <div class="empty-state">
+
+                    <h3>
+                        Unable to load document
+                    </h3>
+
+                    <p>
+                        ${error.message}
+                    </p>
+
+                </div>
+
+            `;
+
+        }
+
+    }
+
+
+    function closeDocument() {
+
+        const modal =
+            document.getElementById("documentModal");
+
+        modal.classList.remove("active");
+
+    }
+
+
+    function escapeHtml(text) {
+
+        const div =
+            document.createElement("div");
+
+        div.textContent = text;
+
+        return div.innerHTML;
+
+    }
+
+
+    document.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Escape") {
+
+                closeDocument();
+
+            }
+
+        }
+    );
 
 </script>
 
+
 </body>
+
 </html>
